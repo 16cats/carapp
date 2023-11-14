@@ -1,58 +1,69 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Button, TextField } from "@mui/material";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+
+
 
 export default function EditCar(props) {
 
     //state
-    //car instead of cars, as we are just going to add one car and not control all the cars
-    const [car, setCar] = useState({ brand: '', model: '' });
-    const [open, setOpen] = useState(false); //is dialog open?
+    const [car, setCar] = useState({ brand: '', model: '' })
 
-    //functions
-    const handleClose = (event, reason) =>{
-        if (reason != 'backdropClick')
+    const [open, setOpen] = useState(false);
+
+    const handleClose = (_, reason) => {
+        if (reason != 'backdropClick') {
             setOpen(false);
+        }
+    }
+
+    const handleInputChange = (event) => {
+        setCar({ ...car, [event.target.name]: event.target.value })
     }
 
     const handleSave = () => {
-        props.addCar(car); //päivitä tilamuuttuja car
-        //update car
-
-        setOpen(false); //close dialog
+        props.updateCar(car, props.car._links.car.href);
+        handleClose();
     }
 
-    const handleInputChanged = (event) =>{
-        setCar({...car, [event.target.name]: event.target.value});
+    const handleClick = () => {
+        setCar({ brand: props.car.brand, model: props.car.model })
+        setOpen(true);
     }
 
-    //return
-    //add button
-    //dialog (add form)
+
+    // return
+    // addbutton
+    //dialogform
     return (
         <>
+            <Button onClick={handleClick} variant="container">Edit car</Button>
             <Dialog
                 open={open}
                 onClose={handleClose}>
-                <DialogTitle>New Car</DialogTitle>
+                <DialogTitle>Edit Car</DialogTitle>
                 <DialogContent>
                     <TextField
-                        label='Brand'
-                        name='brand'
+                        label="Brand"
+                        name="brand"
                         value={car.brand}
-                        onChange={handleInputChanged}>
-                    </TextField>
+                        onChange={handleInputChange}
+                    ></TextField>
                     <TextField
-                        label='Model'
-                        name='model'
+                        label="Model"
+                        name="model"
                         value={car.model}
-                        onChange={handleInputChanged}>
-                    </TextField>
+                        onChange={handleInputChange}
+                    ></TextField>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Close</Button>
                     <Button onClick={handleSave}>Save</Button>
+                    <Button onClick={handleClose}>Close</Button>
                 </DialogActions>
             </Dialog>
         </>
-    );
+    )
 }

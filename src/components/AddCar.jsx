@@ -1,52 +1,43 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { useState } from "react";
 
-export default function AddCar(props) {
-
-    //state
-    //car instead of cars, as we are just going to add one car and not control all the cars
+const AddCar = (props) => {
     const [car, setCar] = useState({ brand: '', model: '' });
-    const [open, setOpen] = useState(false); //is dialog open?
+    const [open, setOpen] = useState(false);
 
-    //functions
-    const handleClose = (event, reason) =>{
-        if (reason != 'backdropClick')
+    const handleClose = (event, reason) => {
+        if (reason !== 'backdropClick') {
             setOpen(false);
+        }
     }
 
     const handleSave = () => {
-        props.addCar(car); //päivitä tilamuuttuja car
-        setOpen(false); //close dialog
+        props.addCar(car);
+        setOpen(false);
     }
 
-    const handleInputChanged = (event) =>{
-        setCar({...car, [event.target.name]: event.target.value});
+    const handleInputChanged = (event) => {
+        setCar({ ...car, [event.target.name]: event.target.value });
     }
 
-    //return
-    //add button
-    //dialog (add form)
     return (
         <>
-            <Button
-                onClick={() => setOpen(true)}>New car</Button>
-            <Dialog
-                open={open}
-                onClose={handleClose}>
+            <Button onClick={() => setOpen(true)}>New car</Button>
+            <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>New Car</DialogTitle>
                 <DialogContent>
                     <TextField
                         label='Brand'
                         name='brand'
                         value={car.brand}
-                        onChange={handleInputChanged}>
-                    </TextField>
+                        onChange={handleInputChanged}
+                    />
                     <TextField
                         label='Model'
                         name='model'
                         value={car.model}
-                        onChange={handleInputChanged}>
-                    </TextField>
+                        onChange={handleInputChanged}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Close</Button>
@@ -56,3 +47,5 @@ export default function AddCar(props) {
         </>
     );
 }
+
+export default AddCar;
